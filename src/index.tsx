@@ -49,13 +49,16 @@ const OauthPopup: (props: IPopupProps) => JSX.Element = ({
       url, title, width, height,
     }));
   };
-
+  console.log("running OauthPopup");
   useEffect(() => {
+    console.log("running useEffect");
     if (externalWindow) {
       intervalRef.current = window.setInterval(() => {
         try {
           const currentUrl = externalWindow.location.href;
           const params = new URL(currentUrl).searchParams;
+          console.log('params', params)
+          console.log('currentUrl', currentUrl)
           const code = params.get('code');
           if (!code) {
             return;
