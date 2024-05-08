@@ -10,6 +10,7 @@ type IWindowProps = {
 type IPopupProps = IWindowProps & {
   onClose: () => void;
   onCode: (code: string, params: URLSearchParams) => void;
+  render: ({ onClick }: { onClick: () => void }) => JSX.Element;
   children: React.ReactNode;
 };
 
@@ -26,7 +27,7 @@ const createPopup = ({
   return externalPopup;
 };
 
-const OauthPopup: React.FC<IPopupProps> = ({
+const OauthPopup: (props: IPopupProps) => JSX.Element = ({
   title = '',
   width = 500,
   height = 500,
@@ -34,6 +35,7 @@ const OauthPopup: React.FC<IPopupProps> = ({
   children,
   onCode,
   onClose,
+  render,
 }: IPopupProps) => {
   const [externalWindow, setExternalWindow] = useState<Window | null>();
   const intervalRef = useRef<number>();
@@ -76,6 +78,10 @@ const OauthPopup: React.FC<IPopupProps> = ({
       if (onClose) onClose();
     };
   }, [externalWindow]);
+
+  if (render) {
+    return render({ onClick: onContainerClick });
+  }
 
   return (
     // eslint-disable-next-line
